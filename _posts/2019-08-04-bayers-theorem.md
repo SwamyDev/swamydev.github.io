@@ -1,6 +1,6 @@
 ---
 title: "Bayesian Statistics - The Basis of AI"
-date: 2019-08-03T15:34:30+02:00
+date: 2019-08-04T12:34:30+02:00
 categories:
   - blog
 tags:
@@ -10,7 +10,9 @@ tags:
   - Bayes' theorem
 mathjax: true
 ---
-In this post, I'll do my best to explain the basics of Bayesian statistics and how it relates to AI and Reinforcement Learning. Bayesian statistics is one of 3 mayor mathematical frameworks that deal with uncertainty. I'll briefly explain the general idea of all 3 and how the Bayesian framework relates to it.
+In this post, I'll do my best to explain the basics of Bayesian statistics and briefly how it relates to AI and Reinforcement Learning. It forms the basis of many Machine Learning and Reinforcement Learning algorithms, and I'll dive deeper into those in future posts. However,  even without AI, we'll come to some surprising conclusions at the end of this post. 
+
+Bayesian statistics is one of 3 mayor mathematical frameworks that deal with uncertainty. I'll briefly explain the general idea of all 3 and how the Bayesian framework relates to it.
 
 ## Classical 
 In the classical framework, we deal with equally likely outcomes, like for instance fair dice rolls. A typical classical probability question would be 'what is the probability that two dice rolls sum up to 6'.

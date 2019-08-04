@@ -16,7 +16,7 @@
 title: What I've Learned
 email:
 description: >- # this means to ignore newlines until "baseurl:"
-  On this blog I try to explain problems, interesting tidbits and science I encounter during my work as a software engineer.
+  On this blog, I try to explain problems, interesting tidbits and science I encounter during my work as a software engineer.
 github_username: SwamyDev
 minimal_mistakes_skin: contrast
 search: true
@@ -57,7 +57,7 @@ plugins:
 author:
   name   : "Bernhard Raml"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "Hi, I'm working as a software engineer since 8 years and on this platform I try to explain to you and myself the problems I encounter in my daily life."
+  bio    : "Hi, I'm working as a software engineer for 8 years, and on this platform, I try to explain to you and myself the problems I encounter in my daily life."
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
