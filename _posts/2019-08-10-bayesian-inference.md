@@ -55,7 +55,7 @@ $$f(\theta | x=1) = 2\theta I_{0 \leq \theta \leq 1}$$
 
 If we plot this as a function of $$\theta$$ we can intuitively see that now the winning distribution leans more toward 1. This means that given our observation, it is more likely that we will observe wins on this slot machine.
 
-![alt]({{ site.url }}{{ site.baseurl }}/assets/images/bayes-inference-belief-update.jpg)
+![Theta distribution graph]({{ site.url }}{{ site.baseurl }}/assets/images/bayes-inference-belief-update.jpg)
 
 It also makes kind of sense because we just observed a win. Of course, this is not very accurate because this is only one observation. By letting the agent pull multiple times, taking various observations, we can continue to update our belief. With sufficient trials, our beliefs should converge to the actual winning probability of the slot machine.
 
