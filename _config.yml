@@ -29,6 +29,7 @@ permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+repository: SwamyDev/swamydev.github.io
 
 include:
   - _pages
@@ -53,6 +54,18 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
+
+comments:
+  provider: "utterances"
+  utterances:
+    theme: "github-light"
+    issue_term: "pathname"
+
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "UA-145440553-1"
+    anonymize_id: true
 
 author:
   name   : "Bernhard Raml"
