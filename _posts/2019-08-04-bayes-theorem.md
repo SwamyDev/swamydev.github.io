@@ -1,6 +1,7 @@
 ---
 title: "Bayesian Statistics - The Basis of AI"
 date: 2019-08-04T12:34:30+02:00
+comments: true
 categories:
   - blog
 tags:
