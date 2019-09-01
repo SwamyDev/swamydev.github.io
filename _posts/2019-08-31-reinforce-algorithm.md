@@ -30,9 +30,9 @@ The numbers next to the actions indicate the probability that this particular ac
 {: .notice--info}
 
 ### Reward Signals
-Another important feature we need to be able to work with MDPs in reinforcement learning are the rewards. Somewhere in this decision process, we need some form of reward-signal. It could be that each action we take or state transition we do is accompanied by a certain reward. However, it is also possible that rewards are only received once we reach a particular terminal state of the MDP.[^terminal] Looking back at our elevator example, we could, for instance, get a positive reward when we reach our destination in time. However, when we are late, because we got stuck in the elevator, we receive a negative reward. 
+Another important feature we need to be able to work with MDPs in reinforcement learning are the rewards. Somewhere in this decision process, we need some form of reward-signal. It could be that entering particular states is accompanied by certain rewards. However, it is also possible that rewards are only received once we enter a specific terminal state of the MDP.[^terminal] Looking back at our elevator example, we could, for instance, get a positive reward when we reach our destination in time. However, when we are late, because we got stuck in the elevator, we receive a negative reward. 
 
-[^terminal]: In this case, you could think of all other state transition rewards to be 0.
+[^terminal]: In this case, you could think of all other state rewards to be 0.
 
 These are the main ingredients necessary to make reinforcement learning work. In the next section, I'll explain how we can model the actual action selection of an agent within such an environment. 
 
@@ -46,7 +46,7 @@ However, often we do not or can not model this distribution precisely, so we use
 $$Policy \sim \pi_\theta(a|s)$$
 
 
-This $$\theta$$ could represent the parameters of a linear equation, the weights of an Artifical Neural Network or any other parameterization. The point is that those parameters are "somehow" involved in producing the action selection probabilities[^density]. The goal of the REINFORCE algorithm is now to find good values for these parameters, so our policy functions produce good probabilities.
+This $$\theta$$ could represent the parameters of a linear equation, the weights of an Artifical Neural Network or any other parameterization. The point is that those parameters are "somehow" involved in producing the action selection probabilities[^density]. The goal of the REINFORCE algorithm is now to find good values for these parameters, so our policy function produces good probabilities.
 
 [^bayes]: If not, I recommend reading my [previous posts]({% post_url 2019-08-10-bayesian-inference %})
 [^density]: More precisely the action selection probability density distribution
@@ -57,18 +57,18 @@ Sow how do we get better estimates for these probabilities. Recall from Bayesian
 [^states]: There is an essential distinction between the two, but we don't worry about that in this post
 
 ### Incorporating the reward signal
-After all, our goal is that our action selects actions in a way, so it gathers the highest possible reward within the constraints of its environment. Because we are usually dealing with a stochastic decision process (the policy) and a stochastic MDP, we want the highest possible **expected** reward. So we are back to statistics again. Recall that for the discrete case, the expected value is the sum of all values weighted by their probability occurring. Our policy function defines the probability of the agent selecting an action within a particular state. The environment then rewards or punishes our agent with a certain reward signal when interacting with it. Taking those two pieces of information, we can write our expected rewards in terms of the policy of the agent:
+After all, our goal is that our agent selects actions in a way, so it gathers the highest possible reward within the constraints of its environment. Because we are usually dealing with a stochastic decision process (the policy) and a stochastic MDP, we want the highest possible **expected reward**. So we are back to statistics again. Recall that for the discrete case, the expected value is the sum of all values weighted by their probability. Our policy function defines the probability of the agent selecting an action within a particular state. The environment then rewards or punishes our agent with reward signals when entering states as a result of its actions. Taking those two pieces of information, we can write our expected rewards in terms of the policy of the agent:
 
 $$E(X) = \sum_{i}^{n}\pi_\theta(a_i|s_i)*r_i$$
 
 Here $$r_i$$ is the reward signal received for the action $$a_i$$ at state $$s_i$$.
 {: .notice--info}
 
-Unfortunately, we usually do not know, or the environment doesn't give us the specific reward signal for each action in each state. In practice, we usually have to work with estimates. There are many different strategies of selecting a good approximation for the reward signal, like for instance the Advantage function, Q-Values, Average Returns[^returns] and many more. However, I save explaining these for a different post. For now, it suffices to say that there is some return value, which is high if we entered a beneficial state and low if it is a harmful one.
+Unfortunately, we usually do not know, or the environment doesn't give us the specific reward signal for each action-state transition. In practice, we usually have to work with estimates. There are many different strategies of selecting a good approximation for the reward signal, like for instance, the Advantage function, Q-Values, Average Returns[^returns] and many more. However, I save explaining these for a different post. For now, it suffices to say that there is some return value, which is high if we entered a beneficial state and low if it is a harmful one.
 
 $$E(X) = \sum_{i}^{n}\pi_\theta(a_i|s_i)*R_i$$
   
-Where $$R_i$$ is some retrun value indicating good or bad action selection
+Where $$R_i$$ is some return value indicating good or bad action selection
 {: .notice--info}
 
 [^returns]: [This excellent article](https://towardsdatascience.com/an-intuitive-explanation-of-policy-gradient-part-1-reinforce-aa4392cbfd3c) by Adrien Lucas Ecoffet does a great job in explaining REINFORCE and also the different return values.
@@ -76,7 +76,10 @@ Where $$R_i$$ is some retrun value indicating good or bad action selection
 ### Updating our Belief with Reward Signal
 So now the big question is, how do we update the parameters $$\theta$$ of our policy, so actions that result in higher returns become more likely. From calculus, we know that taking the [gradient](https://betterexplained.com/articles/vector-calculus-understanding-the-gradient/) of a function gives us the **direction of highest increase** - a.k.a the slope of a function. So taking the gradient with respect to $$\theta$$ from our expected reward formula should give us the direction in which we need to update the parameters $$\theta$$ to maximize our expected return. 
 
-$$E(X) = \sum_{i}^{n}\nabla_\theta\pi_\theta(a_i|s_i)*R_i$$ 
+$$E(X) = \sum_{i}^{n}\nabla_\theta\pi_\theta(a_i|s_i)*R_i$$
+
+The $$\nabla_\theta$$ means taking the gradient of the following function with respect to $$\theta$$. How this is done in details is not that important for understanding the intuition of REINFORCE. It suffices to know that the gradient gives you the direction of highest increase.
+{: .notice--info}
 
 We can also think of the problem in standard Machine Learning terms, which is also what is usually done in practice when implementing such algorithms. In that case, we interpret our expected reward function as a **negative loss** function, and we try to **minimize the negative return**. The reason for this is rather pragmatic, as it allows you to use a machine learning framework like [tensorflow](https://www.tensorflow.org) or [PyTorch](https://pytorch.org) to do the gradient updates for you. 
 
@@ -85,21 +88,28 @@ $$Loss \to \mathcal{L} = -\sum_{i}^{n}\nabla_\theta\pi_\theta(a_i|s_i)*R_i$$
 ### Making our AI curious
 We're almost done with describing our REINFORCE agent, but there is still one problem remaining we need to tackle. Our current algorithm is prone to get stuck at local minima, especially when the initial values for $$\theta$$ are selected unfavourable. In Bayesian terms, it means that when our initial prior beliefs are chosen poorly, our posterior doesn't converge to its true value. A poorly chosen prior in this sense would select a high probability for an action that only produces a small reward. Consequently, our agent would rarely try any other potential high reward action because the small reward keeps bumping up the action.
 
-To get an intuitive feel for this problem, imagine an agent that has the choice between two actions: 
-Either watch TV and get a small reward or go outside and play with the other agents and get an enormous reward. Now imagine our agent is a couch potato and initially already prone to watch TV. Because it has such a high chance of selecting watching TV giving it a small amount of pleasure it keeps binge-watching. The small rewards drown out the high rewards of playing outside. Hence it is very unlikely to select playing with the other agents. Moreover, even if it does, the value it assigns to it is comparatively small to the "watch TV" state, because it does it so rarely. How can we get our agent out of the house?
+To get an intuitive feel for this problem, imagine an agent that has the choice between two actions and two states: 
+Either watch TV and get a small reward or go outside and play with the other agents and get an enormous reward. 
+
+![TV & play outside MDP]({{ site.url }}{{ site.baseurl}}/assets/images/reinforce-tv-and-play-mdp.png)
+
+The expressions $$R:1$$ and $$R:10$$ indicate a reward signal of 1 and 10 when entering the states.
+{: .notice--info}
+
+Now imagine our agent is a couch potato and initially already prone to watch TV. Because it has such a high chance of selecting watching TV giving it a small amount of pleasure it keeps binge-watching. The small rewards drown out the high rewards of playing outside. Hence it is very unlikely to select playing with the other agents. Moreover, even if it does, the value it assigns to it is comparatively small to the "watch TV" state, because it does it so rarely. How can we get our agent out of the house?
 
 Well we can give the returns of rare action more weight when they are chosen. This can simply be done by deviding our gradient formula by the action probabilities:
 
 $$E(X) = \sum_{i}^{n}\frac{\nabla_\theta\pi_\theta(a_i|s_i)*R_i}{\pi_\theta(a_i|s_i)}$$ 
 
-Now when our agent selects an action that is four times as likely as another action, it only receives a quarter of its return compared to the other. In a sense, this way, the agent is more curious about actions it hasn't tried before because now it gets a higher reward from it. Of course, negative rewards are also scaled that way. Meaning, when our agent tries a rare action and gets severely punished for it, it is very unlikely to try again, which is what we'd expect.
+Now when our agent selects an action that is four times as likely as another action, it only receives a quarter of its return compared to the other. In a sense, this way, the agent is more curious about actions it hasn't tried before because now it gets potentially a higher reward from it. Of course, negative rewards are also scaled that way. Meaning, when our agent tries a rare action and gets severely punished for it, it is very unlikely to try again, which is what we'd expect.
 
 ### The log-likelihood trick
-There is one last bit of math missing from our formula, to arrive at the usual expression for REINFORCE. We can optimize it a bit by getting rid of the division by the action probabilities to make it easier to compute in practice. To do so, we need to remember from calculus that the log of a gradient of a function is equal to the gradient divided by that function:
+There is one last bit of math missing from our formula, to arrive at the usual expression for REINFORCE. We can optimize it a bit by getting rid of the division to make it easier to compute in practice. To do so, we need to remember from calculus that the log of a gradient of a function is equal to the gradient divided by that function:
 
 $$\nabla log f(x) = \frac{\nabla f(x)}{f(x)}$$
 
-Now it is easy to see that we can also simply replace the division by taking the logarithm of our policy gradient in our function:
+Now it is easy to see that we can simply replace the division by taking the logarithm of our policy gradient in our function:
 
 $$E(X) = \sum_{i}^{n}\nabla_\theta log \pi_\theta(a_i|s_i)*R_i$$ 
 
