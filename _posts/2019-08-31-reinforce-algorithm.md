@@ -10,7 +10,7 @@ tags:
   - Reinforcement Learning
 mathjax: true
 ---
-Today I'd like to explain the principles of the REINFORCE algorithm one of the most fundamental policy gradient algorithms. It forms the basis of many modern AI systems, which have been seen beating humans at Go, StarCraft or DotA. I think understanding it, is a cornerstone in understanding the field of reinforcement learning. However, first, we need to know some basics, like how we model the environment and the decisions process of our AI agent.
+Today I'd like to explain the principles of the REINFORCE algorithm one of the most fundamental policy gradient algorithms. It forms the basis of many modern AI systems, which have been seen beating humans at Go, StarCraft or DotA. I think understanding it, is a cornerstone in understanding the field of reinforcement learning. In the following sections, I'll explain how the REINFORCE algorithm mathematically expresses an agent's decisions. However, first, we need to know some basics, like how we model the environment and the decisions process of our AI agent.
 
 ## The Environment
 
@@ -36,7 +36,7 @@ Another important feature we need to be able to work with MDPs in reinforcement 
 
 These are the main ingredients necessary to make reinforcement learning work. In the next section, I'll explain how we can model the actual action selection of an agent within such an environment. 
 
-### Modelling Decisions
+### Decision making as a mathematical formula
 Now that we know how an MDP is set up, how do we model an agent selecting actions within such an environment? Specifically, we want to know the chance that an agent selects a certain action when it is in a certain state. Speaking more mathematical, we want to know the action selection **probability density given a** certain **state**. If this sounds like Bayesian statistics[^bayes] all over again to you, then you are right. In the reinforcement learning literature, the policy is usually expressed as the probability density function $$\pi$$:
 
 $$Policy \sim \pi(a|s)$$
